@@ -53,7 +53,7 @@ object fMain: TfMain
     Height = 31
     Top = 677
     Width = 125
-    Caption = 'Вихід'
+    Caption = 'Завершити'
     TabOrder = 2
     OnClick = btnCloseClick
   end
