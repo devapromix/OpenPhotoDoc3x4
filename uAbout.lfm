@@ -1,0 +1,67 @@
+object fAbout: TfAbout
+  Left = 422
+  Height = 204
+  Top = 301
+  Width = 414
+  AutoSize = True
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  BorderWidth = 12
+  Caption = 'Про програму'
+  ClientHeight = 204
+  ClientWidth = 414
+  DesignTimePPI = 120
+  Position = poMainFormCenter
+  LCLVersion = '4.8.0.0'
+  OnCreate = FormCreate
+  object Memo1: TMemo
+    Left = 12
+    Height = 40
+    Top = 73
+    Width = 390
+    Align = alTop
+    Alignment = taCenter
+    BorderSpacing.Top = 12
+    BorderStyle = bsNone
+    Color = clBtnFace
+    Lines.Strings = (
+      'Підготовка та друк фотографій 3х4 для документів на листку А5'
+    )
+    TabOrder = 0
+  end
+  object Label1: TLabel
+    Left = 12
+    Height = 37
+    Top = 24
+    Width = 390
+    Align = alTop
+    Alignment = taCenter
+    BorderSpacing.Top = 12
+    Caption = '  OpenPhotoDoc3x4  '
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -30
+    Font.Name = 'Showcard Gothic'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 12
+    Height = 20
+    Top = 113
+    Width = 390
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Версія 1.0'
+  end
+  object Label3: TLabel
+    Left = 12
+    Height = 20
+    Top = 133
+    Width = 390
+    Align = alTop
+    Alignment = taCenter
+    BorderSpacing.Bottom = 20
+    Caption = 'Apromix 2026'
+  end
+end

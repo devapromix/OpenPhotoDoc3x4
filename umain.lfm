@@ -1,0 +1,79 @@
+object fMain: TfMain
+  Left = 601
+  Height = 719
+  Top = 156
+  Width = 650
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  BorderWidth = 8
+  Caption = 'OpenPhotoDoc3x4'
+  ClientHeight = 719
+  ClientWidth = 650
+  DesignTimePPI = 120
+  Position = poScreenCenter
+  LCLVersion = '4.8.0.0'
+  OnCreate = FormCreate
+  object btnOpen: TButton
+    Left = 518
+    Height = 31
+    Top = 8
+    Width = 125
+    Caption = 'Вибрати фото'
+    TabOrder = 0
+    OnClick = btnOpenClick
+  end
+  object imgPhoto: TImage
+    Left = 518
+    Height = 160
+    Top = 368
+    Width = 120
+    Proportional = True
+    Stretch = True
+    Visible = False
+  end
+  object PaintBox1: TPaintBox
+    Left = 8
+    Height = 700
+    Top = 8
+    Width = 500
+    OnClick = PaintBox1Click
+    OnPaint = PaintBox1Paint
+  end
+  object btnPrint: TButton
+    Left = 518
+    Height = 31
+    Top = 48
+    Width = 125
+    Caption = 'Роздрукувати'
+    TabOrder = 1
+    OnClick = btnPrintClick
+  end
+  object btnClose: TButton
+    Left = 518
+    Height = 31
+    Top = 677
+    Width = 125
+    Caption = 'Вихід'
+    TabOrder = 2
+    OnClick = btnCloseClick
+  end
+  object btnAbout: TButton
+    Left = 518
+    Height = 31
+    Top = 640
+    Width = 125
+    Caption = 'Про програму'
+    TabOrder = 3
+    OnClick = btnAboutClick
+  end
+  object OD: TOpenDialog
+    Title = 'Виберіть фото'
+    Filter = 'Зображення|*.jpg;*.jpeg;*.png;*.bmp'
+    Left = 536
+    Top = 200
+  end
+  object PD: TPrintDialog
+    Left = 576
+    Top = 200
+  end
+end
