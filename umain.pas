@@ -30,9 +30,9 @@ type
     procedure PaintBox1Click(Sender: TObject);
     procedure PaintBox1Paint(Sender: TObject);
   private
-    function GetPhotoCount: Integer;
-    function GetPhoto(Index: Integer): TGraphic;
-    function GetPhotoIndex(PosIdx, PhotoCount: Integer): Integer;
+    function GetPhotoCount: integer;
+    function GetPhoto(Index: integer): TGraphic;
+    function GetPhotoIndex(PosIdx, PhotoCount: integer): integer;
     procedure BuildSheet;
   public
     destructor Destroy; override;
@@ -46,12 +46,20 @@ implementation
 uses
   uAbout;
 
-{$R *.lfm}
+  {$R *.lfm}
 
 var
-  Sheet: TBitmap;
+  LSheet: TBitmap;
 
-function TfMain.GetPhotoCount: Integer;
+const
+  CColumns = 4;
+  CRows = 5;
+  CSheetWidth = 1480;
+  CSheetHeight = 2100;
+  CPhotoWidth = 300;
+  CPhotoHeight = 400;
+
+function TfMain.GetPhotoCount: integer;
 begin
   Result := 0;
 
@@ -68,7 +76,7 @@ begin
     Inc(Result);
 end;
 
-function TfMain.GetPhoto(Index: Integer): TGraphic;
+function TfMain.GetPhoto(Index: integer): TGraphic;
 begin
   Result := nil;
 
@@ -84,7 +92,7 @@ begin
   end;
 end;
 
-function TfMain.GetPhotoIndex(PosIdx, PhotoCount: Integer): Integer;
+function TfMain.GetPhotoIndex(PosIdx, PhotoCount: integer): integer;
 begin
   case PhotoCount of
     1:
@@ -103,97 +111,87 @@ begin
         Result := 3;
     4:
       Result := (PosIdx div 5) + 1;
-  else
-    Result := 0;
+    else
+      Result := 0;
   end;
 end;
 
 procedure TfMain.BuildSheet;
-const
-  SheetWidth = 1480;
-  SheetHeight = 2100;
-  PhotoWidth = 300;
-  PhotoHeight = 400;
-  Columns = 4;
-  Rows = 5;
 var
-  X, Y: Integer;
-  PosIdx: Integer;
-  PhotoIndex: Integer;
-  PhotoCount: Integer;
-  LeftMargin, TopMargin: Integer;
-  Graphic: TGraphic;
+  LX, LY: integer;
+  LPosIdx: integer;
+  LPhotoIndex: integer;
+  LPhotoCount: integer;
+  LLeftMargin, LTopMargin: integer;
+  LGraphic: TGraphic;
 begin
-  PhotoCount := GetPhotoCount;
+  LPhotoCount := GetPhotoCount;
 
-  if PhotoCount = 0 then
+  if LPhotoCount = 0 then
   begin
     PaintBox1.Invalidate;
     Exit;
   end;
 
-  if not Assigned(Sheet) then
-    Sheet := TBitmap.Create;
+  if not Assigned(LSheet) then
+    LSheet := TBitmap.Create;
 
-  Sheet.SetSize(SheetWidth, SheetHeight);
-  Sheet.PixelFormat := pf24bit;
+  LSheet.SetSize(CSheetWidth, CSheetHeight);
+  LSheet.PixelFormat := pf24bit;
 
-  Sheet.Canvas.Brush.Style := bsSolid;
-  Sheet.Canvas.Brush.Color := clWhite;
-  Sheet.Canvas.FillRect(0, 0, Sheet.Width, Sheet.Height);
+  LSheet.Canvas.Brush.Style := bsSolid;
+  LSheet.Canvas.Brush.Color := clWhite;
+  LSheet.Canvas.FillRect(0, 0, LSheet.Width, LSheet.Height);
 
-  LeftMargin := (Sheet.Width - Columns * PhotoWidth) div 2;
-  TopMargin := (Sheet.Height - Rows * PhotoHeight) div 2;
+  LLeftMargin := (LSheet.Width - CColumns * CPhotoWidth) div 2;
+  LTopMargin := (LSheet.Height - CRows * CPhotoHeight) div 2;
 
-  for PosIdx := 0 to Columns * Rows - 1 do
+  for LPosIdx := 0 to CColumns * CRows - 1 do
   begin
-    X := PosIdx mod Columns;
-    Y := PosIdx div Columns;
-    PhotoIndex := GetPhotoIndex(PosIdx, PhotoCount);
-    Graphic := GetPhoto(PhotoIndex);
+    LX := LPosIdx mod CColumns;
+    LY := LPosIdx div CColumns;
+    LPhotoIndex := GetPhotoIndex(LPosIdx, LPhotoCount);
+    LGraphic := GetPhoto(LPhotoIndex);
 
-    if Assigned(Graphic) then
-      Sheet.Canvas.StretchDraw(
-        Rect(
-          LeftMargin + X * PhotoWidth,
-          TopMargin + Y * PhotoHeight,
-          LeftMargin + (X + 1) * PhotoWidth,
-          TopMargin + (Y + 1) * PhotoHeight
-        ),
-        Graphic
-      );
+    if Assigned(LGraphic) then
+      LSheet.Canvas.StretchDraw(
+        Rect(LLeftMargin + LX * CPhotoWidth, LTopMargin + LY *
+        CPhotoHeight, LLeftMargin + (LX + 1) * CPhotoWidth, LTopMargin +
+        (LY + 1) * CPhotoHeight),
+        LGraphic
+        );
   end;
 
-  Sheet.Canvas.Pen.Color := clBlack;
-  Sheet.Canvas.Pen.Width := 3;
-  Sheet.Canvas.Brush.Style := bsClear;
+  LSheet.Canvas.Pen.Color := clBlack;
+  LSheet.Canvas.Pen.Width := 3;
+  LSheet.Canvas.Brush.Style := bsClear;
 
-  for X := 0 to Columns do
-    Sheet.Canvas.Line(
-      LeftMargin + X * PhotoWidth,
-      TopMargin,
-      LeftMargin + X * PhotoWidth,
-      TopMargin + Rows * PhotoHeight
-    );
+  for LX := 0 to CColumns do
+    LSheet.Canvas.Line(
+      LLeftMargin + LX * CPhotoWidth,
+      LTopMargin,
+      LLeftMargin + LX * CPhotoWidth,
+      LTopMargin + CRows * CPhotoHeight
+      );
 
-  for Y := 0 to Rows do
-    Sheet.Canvas.Line(
-      LeftMargin,
-      TopMargin + Y * PhotoHeight,
-      LeftMargin + Columns * PhotoWidth,
-      TopMargin + Y * PhotoHeight
-    );
+  for LY := 0 to CRows do
+    LSheet.Canvas.Line(
+      LLeftMargin,
+      LTopMargin + LY * CPhotoHeight,
+      LLeftMargin + CColumns * CPhotoWidth,
+      LTopMargin + LY * CPhotoHeight
+      );
 
   PaintBox1.Invalidate;
 end;
 
 procedure TfMain.btnOpenClick(Sender: TObject);
 var
-  PhotoCount: Integer;
+  LPhotoCount: integer;
 begin
-  PhotoCount := GetPhotoCount;
+  LPhotoCount := GetPhotoCount;
 
-  if PhotoCount >= 4 then
+  if LPhotoCount >= 4 then
   begin
     ShowMessage('Вже вибрано 4 фотографії. Максимум — 4.');
     Exit;
@@ -202,7 +200,7 @@ begin
   if not OD.Execute then
     Exit;
 
-  case PhotoCount + 1 of
+  case LPhotoCount + 1 of
     1:
       imgPhoto1.Picture.LoadFromFile(OD.FileName);
     2:
@@ -227,27 +225,24 @@ begin
 end;
 
 procedure TfMain.btnPrintClick(Sender: TObject);
-const
-  Columns = 4;
-  Rows = 5;
 var
-  X, Y: Integer;
-  PosIdx: Integer;
-  PhotoWidth, PhotoHeight: Integer;
-  LeftMargin, TopMargin: Integer;
-  PhotoCount: Integer;
-  PhotoIndex: Integer;
-  Graphic: TGraphic;
+  LX, LY: integer;
+  LPosIdx: integer;
+  LPhotoWidth, LPhotoHeight: integer;
+  LLeftMargin, LTopMargin: integer;
+  LPhotoCount: integer;
+  LPhotoIndex: integer;
+  LGraphic: TGraphic;
 
-  function MmToDots(Mm: Double; DPI: Integer): Integer;
+  function MmToDots(Mm: double; DPI: integer): integer;
   begin
     Result := Round(Mm * DPI / 25.4);
   end;
 
 begin
-  PhotoCount := GetPhotoCount;
+  LPhotoCount := GetPhotoCount;
 
-  if PhotoCount = 0 then
+  if LPhotoCount = 0 then
   begin
     ShowMessage('Спочатку виберіть хоча б одну фотографію.');
     Exit;
@@ -258,50 +253,47 @@ begin
 
   Printer.BeginDoc;
   try
-    PhotoWidth := MmToDots(30, Printer.XDPI);
-    PhotoHeight := MmToDots(40, Printer.YDPI);
+    LPhotoWidth := MmToDots(30, Printer.XDPI);
+    LPhotoHeight := MmToDots(40, Printer.YDPI);
 
-    LeftMargin := (Printer.PageWidth - Columns * PhotoWidth) div 2;
-    TopMargin := (Printer.PageHeight - Rows * PhotoHeight) div 2;
+    LLeftMargin := (Printer.PageWidth - CColumns * LPhotoWidth) div 2;
+    LTopMargin := (Printer.PageHeight - CRows * LPhotoHeight) div 2;
 
-    for PosIdx := 0 to Columns * Rows - 1 do
+    for LPosIdx := 0 to CColumns * CRows - 1 do
     begin
-      X := PosIdx mod Columns;
-      Y := PosIdx div Columns;
-      PhotoIndex := GetPhotoIndex(PosIdx, PhotoCount);
-      Graphic := GetPhoto(PhotoIndex);
+      LX := LPosIdx mod CColumns;
+      LY := LPosIdx div CColumns;
+      LPhotoIndex := GetPhotoIndex(LPosIdx, LPhotoCount);
+      LGraphic := GetPhoto(LPhotoIndex);
 
-      if Assigned(Graphic) then
+      if Assigned(LGraphic) then
         Printer.Canvas.StretchDraw(
-          Rect(
-            LeftMargin + X * PhotoWidth,
-            TopMargin + Y * PhotoHeight,
-            LeftMargin + (X + 1) * PhotoWidth,
-            TopMargin + (Y + 1) * PhotoHeight
-          ),
-          Graphic
-        );
+          Rect(LLeftMargin + LX * LPhotoWidth, LTopMargin + LY *
+          LPhotoHeight, LLeftMargin + (LX + 1) * LPhotoWidth, LTopMargin +
+          (LY + 1) * LPhotoHeight),
+          LGraphic
+          );
     end;
 
     Printer.Canvas.Pen.Color := clBlack;
     Printer.Canvas.Pen.Width := 1;
     Printer.Canvas.Brush.Style := bsClear;
 
-    for X := 0 to Columns do
+    for LX := 0 to CColumns do
       Printer.Canvas.Line(
-        LeftMargin + X * PhotoWidth,
-        TopMargin,
-        LeftMargin + X * PhotoWidth,
-        TopMargin + Rows * PhotoHeight
-      );
+        LLeftMargin + LX * LPhotoWidth,
+        LTopMargin,
+        LLeftMargin + LX * LPhotoWidth,
+        LTopMargin + CRows * LPhotoHeight
+        );
 
-    for Y := 0 to Rows do
+    for LY := 0 to CRows do
       Printer.Canvas.Line(
-        LeftMargin,
-        TopMargin + Y * PhotoHeight,
-        LeftMargin + Columns * PhotoWidth,
-        TopMargin + Y * PhotoHeight
-      );
+        LLeftMargin,
+        LTopMargin + LY * LPhotoHeight,
+        LLeftMargin + CColumns * LPhotoWidth,
+        LTopMargin + LY * LPhotoHeight
+        );
 
     Printer.EndDoc;
   except
@@ -312,7 +304,7 @@ end;
 
 procedure TfMain.FormCreate(Sender: TObject);
 begin
-  Sheet := nil;
+  LSheet := nil;
   imgPhoto1.Picture.Clear;
   imgPhoto2.Picture.Clear;
   imgPhoto3.Picture.Clear;
@@ -328,13 +320,13 @@ begin
   PaintBox1.Canvas.Brush.Color := clWhite;
   PaintBox1.Canvas.FillRect(PaintBox1.ClientRect);
 
-  if Assigned(Sheet) then
-    PaintBox1.Canvas.StretchDraw(PaintBox1.ClientRect, Sheet);
+  if Assigned(LSheet) then
+    PaintBox1.Canvas.StretchDraw(PaintBox1.ClientRect, LSheet);
 end;
 
 destructor TfMain.Destroy;
 begin
-  FreeAndNil(Sheet);
+  FreeAndNil(LSheet);
   inherited Destroy;
 end;
 
