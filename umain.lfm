@@ -22,10 +22,10 @@ object fMain: TfMain
     TabOrder = 0
     OnClick = btnOpenClick
   end
-  object imgPhoto: TImage
+  object imgPhoto1: TImage
     Left = 518
     Height = 160
-    Top = 368
+    Top = 264
     Width = 120
     Proportional = True
     Stretch = True
@@ -65,6 +65,33 @@ object fMain: TfMain
     Caption = 'Про програму'
     TabOrder = 3
     OnClick = btnAboutClick
+  end
+  object imgPhoto2: TImage
+    Left = 518
+    Height = 160
+    Top = 304
+    Width = 120
+    Proportional = True
+    Stretch = True
+    Visible = False
+  end
+  object imgPhoto3: TImage
+    Left = 518
+    Height = 160
+    Top = 344
+    Width = 120
+    Proportional = True
+    Stretch = True
+    Visible = False
+  end
+  object imgPhoto4: TImage
+    Left = 520
+    Height = 160
+    Top = 384
+    Width = 120
+    Proportional = True
+    Stretch = True
+    Visible = False
   end
   object OD: TOpenDialog
     Title = 'Виберіть фото'
